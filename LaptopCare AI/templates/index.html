@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaptopCare AI</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <span class="brand-icon">✦</span>
+            <div>
+                <h1>LaptopCare <span>AI</span></h1>
+                <p>SMART DEVICE HEALTH MONITOR</p>
+            </div>
+        </div>
+        <div class="live-status">
+            <span class="status-dot"></span> SYSTEM MONITOR
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="welcome">
+            <div>
+                <p class="eyebrow">DEVICE INTELLIGENCE / OVERVIEW</p>
+                <h2>Your laptop, <span>under control.</span></h2>
+                <p class="subtitle">Monitor performance and identify potential issues in real time.</p>
+            </div>
+            <button id="refreshBtn" class="refresh-btn">↻ Refresh Scan</button>
+        </section>
+
+        <section class="device-panel">
+            <div>
+                <p class="muted">CURRENT DEVICE</p>
+                <h3 id="deviceName">Detecting device...</h3>
+                <p id="osName" class="muted">Checking operating system</p>
+            </div>
+            <div class="device-symbol">💻</div>
+        </section>
+
+        <section class="metrics">
+            <article class="metric-card">
+                <div class="metric-heading"><span>CPU USAGE</span><span>◈</span></div>
+                <div class="metric-value"><span id="cpuValue">--</span><small>%</small></div>
+                <div class="progress"><div id="cpuBar" class="progress-fill"></div></div>
+                <p class="metric-note">Processor workload</p>
+            </article>
+
+            <article class="metric-card">
+                <div class="metric-heading"><span>MEMORY USAGE</span><span>▦</span></div>
+                <div class="metric-value"><span id="memoryValue">--</span><small>%</small></div>
+                <div class="progress"><div id="memoryBar" class="progress-fill purple"></div></div>
+                <p id="memoryNote" class="metric-note">RAM utilization</p>
+            </article>
+
+            <article class="metric-card">
+                <div class="metric-heading"><span>DISK USAGE</span><span>▤</span></div>
+                <div class="metric-value"><span id="diskValue">--</span><small>%</small></div>
+                <div class="progress"><div id="diskBar" class="progress-fill orange"></div></div>
+                <p id="diskNote" class="metric-note">Storage utilization</p>
+            </article>
+        </section>
+
+        <section class="bottom-grid">
+            <article class="panel">
+                <div class="panel-heading">
+                    <div><p class="eyebrow">SYSTEM ANALYSIS</p><h3>Health Assessment</h3></div>
+                    <span id="healthBadge" class="health-badge">SCANNING</span>
+                </div>
+                <p id="healthMessage" class="health-message">Collecting system information...</p>
+                <p id="lastUpdated" class="muted">Waiting for first scan</p>
+            </article>
+
+            <article class="panel">
+                <div class="panel-heading">
+                    <div><p class="eyebrow">AI-ASSISTED INSIGHTS</p><h3>Recommendations</h3></div>
+                    <span>✧</span>
+                </div>
+                <ul id="recommendations" class="recommendations">
+                    <li>Waiting for device analysis...</li>
+                </ul>
+            </article>
+        </section>
+
+        <footer> LaptopCare AI · Local device monitoring · <span>Built for smarter maintenance</span></footer>
+    </main>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
