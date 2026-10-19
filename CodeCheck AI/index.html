@@ -1,0 +1,339 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeCheck AI | Smart Code Analyzer</title>
+<style>
+:root {
+  --bg: #0b1020;
+  --panel: #121a2e;
+  --border: #26334e;
+  --text: #e8eefc;
+  --muted: #93a4c4;
+  --accent: #7c6cff;
+  --green: #40d9a2;
+  --red: #ff7185;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 6%;
+  border-bottom: 1px solid var(--border);
+  background: #0e1528;
+}
+.brand { font-size: 22px; font-weight: 800; }
+.brand span { color: var(--accent); }
+.status { color: var(--green); font-size: 13px; }
+main { max-width: 1200px; margin: auto; padding: 38px 22px; }
+.hero { margin-bottom: 28px; }
+.eyebrow {
+  color: #a99fff;
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+h1 { font-size: clamp(30px, 5vw, 46px); margin: 12px 0; }
+.hero p, .muted { color: var(--muted); line-height: 1.7; }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.stat, .panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 15px;
+}
+.stat { padding: 18px; }
+.stat strong { display: block; font-size: 24px; margin-bottom: 5px; }
+.stat span { color: var(--muted); font-size: 13px; }
+.workspace {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 18px;
+}
+.panel { padding: 22px; min-width: 0; }
+.panel h2 { margin-top: 0; font-size: 18px; }
+label {
+  display: block;
+  margin: 18px 0 8px;
+  font-size: 13px;
+  color: #c5d1ea;
+}
+select, textarea {
+  width: 100%;
+  background: #090f1e;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 12px;
+  font: inherit;
+}
+textarea {
+  min-height: 300px;
+  resize: vertical;
+  font-family: Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.65;
+}
+button {
+  border: 0;
+  border-radius: 9px;
+  padding: 12px 17px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.primary {
+  width: 100%;
+  margin-top: 14px;
+  color: white;
+  background: linear-gradient(110deg, #6557ec, #9874ff);
+}
+.secondary {
+  color: var(--text);
+  background: #222d45;
+  margin-top: 12px;
+}
+button:disabled { opacity: .6; cursor: wait; }
+.result-box {
+  background: #0b1222;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 14px;
+}
+.result-box h3 { margin-top: 0; font-size: 15px; }
+.result-box p, .result-box li {
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.tag {
+  display: inline-block;
+  background: #29244e;
+  color: #c5baff;
+  border-radius: 20px;
+  padding: 5px 9px;
+  font-size: 11px;
+}
+#results { display: none; }
+#error { color: var(--red); }
+footer {
+  text-align: center;
+  padding: 28px 16px;
+  color: var(--muted);
+  font-size: 12px;
+}
+@media(max-width: 760px) {
+  .workspace { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: 1fr; }
+  header { padding: 17px 5%; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">CodeCheck <span>AI</span></div>
+  <div class="status">â— Analyzer interface ready</div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="eyebrow">DEVELOPER TOOLKIT / 01</div>
+    <h1>Find bugs before they find you.</h1>
+    <p>Analyze source code, understand potential errors, and explore suggested fixes in one workspace.</p>
+  </section>
+
+  <section class="stats">
+    <div class="stat">
+      <strong>04+</strong>
+      <span>Planned language support</span>
+    </div>
+    <div class="stat">
+      <strong>AI</strong>
+      <span>Explain and suggest fixes</span>
+    </div>
+    <div class="stat">
+      <strong>Live</strong>
+      <span>Analysis results workspace</span>
+    </div>
+  </section>
+
+  <section class="workspace">
+    <div class="panel">
+      <h2>Code workspace</h2>
+      <p class="muted">Paste your code below to begin analysis.</p>
+
+      <label for="language">Programming language</label>
+      <select id="language">
+        <option value="python">Python</option>
+        <option value="javascript">JavaScript</option>
+        <option value="html">HTML</option>
+        <option value="css">CSS</option>
+      </select>
+
+      <label for="code">Source code</label>
+      <textarea id="code" spellcheck="false" placeholder="Paste your code here..."></textarea>
+
+      <button class="primary" id="analyzeBtn" onclick="analyzeCode()">
+        Analyze Code â†’
+      </button>
+      <button class="secondary" onclick="loadExample()">Load example code</button>
+      <p class="muted" id="message" role="status">Waiting for code input.</p>
+    </div>
+
+    <div class="panel">
+      <h2>Analysis report</h2>
+      <p class="muted">Findings will appear here after analysis.</p>
+
+      <div class="result-box">
+        <h3>Analysis status</h3>
+        <span class="tag" id="statusTag">NOT ANALYZED</span>
+        <p id="summary">Submit code to generate a report.</p>
+      </div>
+
+      <div id="results">
+        <div class="result-box">
+          <h3>Findings</h3>
+          <ul id="findings"></ul>
+        </div>
+        <div class="result-box">
+          <h3>Suggested fix</h3>
+          <pre id="fix" style="white-space:pre-wrap;color:#40d9a2;font-size:12px"></pre>
+        </div>
+        <p id="error"></p>
+        <button class="secondary" onclick="downloadReport()">Download JSON report</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  CodeCheck AI Â· Preliminary code analysis Â· Findings require developer verification
+</footer>
+
+<script>
+let latestReport = null;
+
+function loadExample() {
+  document.getElementById("language").value = "python";
+  document.getElementById("code").value =
+`def add_numbers(a, b)
+    result = a + b
+    print(result)
+
+add_numbers(5, "10")`;
+  document.getElementById("message").textContent =
+    "Example loaded. Click Analyze Code.";
+}
+
+async function analyzeCode() {
+  const code = document.getElementById("code").value.trim();
+  const language = document.getElementById("language").value;
+  const button = document.getElementById("analyzeBtn");
+  const message = document.getElementById("message");
+
+  if (!code) {
+    message.textContent = "Please paste code before analyzing.";
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "Analyzing...";
+  message.textContent = "Sending code to the analyzer...";
+  document.getElementById("results").style.display = "block";
+  document.getElementById("error").textContent = "";
+
+  try {
+    const response = await fetch("http://127.0.0.1:8001/api/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code, language })
+    });
+const responseText = await response.text();
+console.log("API raw response:", JSON.stringify(responseText));
+
+let report;
+
+try {
+  report = JSON.parse(responseText);
+} catch {
+  throw new Error(
+    `Invalid API response. HTTP ${response.status}. Check browser Console.`
+  );
+}
+
+if (!response.ok) {
+  throw new Error(report.detail || "Analysis request failed.");
+}
+
+
+    latestReport = report;
+    document.getElementById("statusTag").textContent =
+      report.status || "ANALYZED";
+    document.getElementById("summary").textContent =
+      report.summary || "Analysis completed.";
+    document.getElementById("fix").textContent =
+      report.suggested_fix || "No automatic fix suggested.";
+
+    const list = document.getElementById("findings");
+    list.replaceChildren();
+
+    for (const finding of (report.findings || [])) {
+      const item = document.createElement("li");
+      item.textContent =
+        `[${finding.severity || "INFO"}] ${finding.message || "Finding"}` +
+        (finding.line ? ` (line ${finding.line})` : "");
+      list.appendChild(item);
+    }
+
+    if (!list.children.length) {
+      const item = document.createElement("li");
+      item.textContent = "No findings returned. This does not guarantee bug-free code.";
+      list.appendChild(item);
+    }
+
+    message.textContent = "Analysis complete.";
+  } catch (error) {
+    document.getElementById("statusTag").textContent = "REQUEST FAILED";
+    document.getElementById("summary").textContent =
+      "The backend could not analyze this code.";
+    document.getElementById("error").textContent =
+      error.message + " Start the backend and try again.";
+    message.textContent = "Could not connect to the analyzer.";
+  } finally {
+    button.disabled = false;
+    button.textContent = "Analyze Code â†’";
+  }
+}
+
+function downloadReport() {
+  if (!latestReport) return;
+  const blob = new Blob([JSON.stringify(latestReport, null, 2)], {
+    type: "application/json"
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "codecheck-report.json";
+  link.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
+
+
